@@ -1,12 +1,8 @@
-import React, { useCallback, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { CCallout, CCard, CCardBody, CCardHeader, CCardTitle } from '@coreui/react'
 import { CippDatatable } from 'src/components/tables'
-import { useDispatch, useSelector } from 'react-redux'
-import { useSearchParams, useNavigate } from 'react-router-dom'
-import { setCurrentTenant } from 'src/store/features/app'
-import { useListTenantsQuery } from 'src/store/api/tenants'
-import { queryString } from 'src/helpers'
+import { useSelector } from 'react-redux'
 
 export function CippPage({
   tenantSelector = false,
@@ -16,45 +12,13 @@ export function CippPage({
   titleButton = null,
   wizard = false,
 }) {
-  const { data: tenants = [], isSuccess } = useListTenantsQuery({ showAllTenantSelector })
-  const tenant = useSelector((state) => state.app.currentTenant)
-  const [searchParams, setSearchParams] = useSearchParams()
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-
-  const updateSearchParams = useCallback(
-    (params) => {
-      navigate(`${queryString(params)}`, { replace: true })
-    },
-    [navigate],
-  )
-
-  useEffect(() => {
-    if (tenantSelector) {
-      const customerId = searchParams.get('customerId')
-      if (customerId && isSuccess) {
-        const currentTenant = tenants.filter((tenant) => tenant.customerId === customerId)
-        if (currentTenant.length > 0) {
-          dispatch(setCurrentTenant({ tenant: currentTenant[0] }))
-        }
-      }
-      if (!customerId && Object.keys(tenant).length > 0) {
-        updateSearchParams({ customerId: tenant?.customerId })
-      }
-    }
-  }, [dispatch, isSuccess, searchParams, tenant, tenantSelector, tenants, updateSearchParams])
-
-  const handleTenantSelect = (tenant) => {
-    setSearchParams({ customerId: tenant.customerId })
-  }
-
   return (
     <div>
       <>
         {wizard && (
           <CCard className="content-card">
             <CCardBody>
-              {tenantSelector && Object.keys(tenant).length === 0 ? (
+              {tenantSelector ? (
                 <CCallout className="mb-0" color="warning">
                   Select a tenant to get started.
                 </CCallout>
@@ -66,7 +30,7 @@ export function CippPage({
         )}
         {!wizard && (
           <CCardBody>
-            {tenantSelector && Object.keys(tenant).length === 0 ? (
+            {tenantSelector ? (
               <CCallout className="mb-0" color="warning">
                 Select a tenant to get started.
               </CCallout>
