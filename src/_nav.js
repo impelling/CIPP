@@ -160,7 +160,7 @@ const _nav = [
     items: [
       {
         component: CNavItem,
-        name: 'List Applied Standards',
+        name: 'List and Edit Standards',
         to: '/tenant/standards/list-applied-standards',
       },
       {
@@ -462,6 +462,11 @@ const _nav = [
         name: 'Contacts',
         to: '/email/administration/contacts',
       },
+      {
+        component: CNavItem,
+        name: 'Quarantine',
+        to: '/email/administration/quarantine',
+      },
     ],
   },
   {
@@ -540,7 +545,7 @@ const _nav = [
       },
       {
         component: CNavItem,
-        name: 'SAM Setup Wizard (β)',
+        name: 'SAM Setup Wizard',
         to: '/cipp/setup',
       },
       {
