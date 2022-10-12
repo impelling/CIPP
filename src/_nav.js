@@ -16,6 +16,7 @@ import {
   faKey,
   faBus,
   faExclamationTriangle,
+  faUserShield,
 } from '@fortawesome/free-solid-svg-icons'
 
 const _nav = [
@@ -196,6 +197,11 @@ const _nav = [
         component: CNavItem,
         name: 'List Policies',
         to: '/tenant/conditional/list-policies',
+      },
+      {
+        component: CNavItem,
+        name: 'List Named Locations',
+        to: '/tenant/conditional/list-named-locations',
       },
       {
         component: CNavItem,
@@ -572,6 +578,31 @@ const _nav = [
         component: CNavItem,
         name: 'Documentation',
         href: 'https://cipp.app',
+        target: '_blank',
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'GDAP Migration',
+    section: 'Settings',
+    to: '/cipp/gdap',
+    icon: <FontAwesomeIcon icon={faUserShield} className="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Migration Wizard',
+        to: '/tenant/administration/gdap',
+      },
+      {
+        component: CNavItem,
+        name: 'GDAP Migration Status',
+        to: '/tenant/administration/gdap-status',
+      },
+      {
+        component: CNavItem,
+        name: 'Documentation',
+        href: 'https://cipp.app/docs/user/usingcipp/GDAP/migration',
         target: '_blank',
       },
     ],
