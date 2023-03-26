@@ -159,14 +159,14 @@ const Offcanvas = (row, rowIndex, formatExtraData) => {
             label: 'Reset Password (Must Change)',
             color: 'info',
             modal: true,
-            modalUrl: `/api/ExecResetPass?MustChange=true&TenantFilter=${tenant.defaultDomainName}&ID=${row.id}`,
+            modalUrl: `/api/ExecResetPass?MustChange=true&TenantFilter=${tenant.defaultDomainName}&ID=${row.id}&displayName=${row.displayName}`,
             modalMessage: 'Are you sure you want to reset the password for this user?',
           },
           {
             label: 'Reset Password',
             color: 'info',
             modal: true,
-            modalUrl: `/api/ExecResetPass?MustChange=false&TenantFilter=${tenant.defaultDomainName}&ID=${row.id}`,
+            modalUrl: `/api/ExecResetPass?MustChange=false&TenantFilter=${tenant.defaultDomainName}&ID=${row.id}&displayName=${row.displayName}`,
             modalMessage: 'Are you sure you want to reset the password for this user?',
           },
           {
@@ -271,6 +271,7 @@ const Users = (row) => {
       datatable={{
         filterlist: [
           { filterName: 'Enabled users', filter: '"accountEnabled":true' },
+          { filterName: 'Disabled users', filter: '"accountEnabled":false' },
           { filterName: 'AAD users', filter: '"onPremisesSyncEnabled":false' },
           { filterName: 'Synced users', filter: '"onPremisesSyncEnabled":true' },
           { filterName: 'Guest users', filter: '"usertype":"guest"' },
