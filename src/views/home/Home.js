@@ -23,11 +23,7 @@ import Skeleton from 'react-loading-skeleton'
 import { UniversalSearch } from 'src/components/utilities/UniversalSearch'
 import { ActionContentCard } from 'src/components/contentcards'
 import { useSelector } from 'react-redux'
-import TimeAgo from 'javascript-time-ago'
 import allStandardsList from 'src/data/standards'
-
-import en from 'javascript-time-ago/locale/en.json'
-TimeAgo.addDefaultLocale(en)
 import ReactTimeAgo from 'react-time-ago'
 
 const Home = () => {
@@ -53,6 +49,16 @@ const Home = () => {
   })
 
   const {
+    data: sharepoint,
+    isLoading: isLoadingSPQuota,
+    isSuccess: issuccessSPQuota,
+    isFetching: isFetchingSPQuota,
+  } = useGenericGetRequestQuery({
+    path: '/api/ListSharepointQuota',
+    params: { tenantFilter: currentTenant.defaultDomainName },
+  })
+
+  const {
     data: standards,
     isLoading: isLoadingStandards,
     isSuccess: issuccessStandards,
@@ -60,6 +66,20 @@ const Home = () => {
   } = useGenericGetRequestQuery({
     path: '/api/ListStandards',
     params: {},
+  })
+
+  const {
+    data: partners,
+    isLoading: isLoadingPartners,
+    isSuccess: issuccessPartners,
+    isFetching: isFetchingPartners,
+  } = useGenericGetRequestQuery({
+    path: '/api/ListGraphRequest',
+    params: {
+      Endpoint: 'policies/crossTenantAccessPolicy/partners',
+      tenantFilter: currentTenant.defaultDomainName,
+      ReverseTenantLookup: true,
+    },
   })
 
   const actions1 = [
@@ -120,6 +140,11 @@ const Home = () => {
       label: 'List Groups',
       link: `/identity/administration/groups?customerId=${currentTenant.customerId}`,
       icon: faUsers,
+    },
+    {
+      label: 'List Devices',
+      link: `/endpoint/reports/devices?customerId=${currentTenant.customerId}`,
+      icon: faLaptopCode,
     },
     {
       label: 'Create User',
@@ -258,6 +283,11 @@ const Home = () => {
                     ))}
               </CCol>
               <CCol sm={12} md={4} className="mb-3">
+                <p className="fw-lighter">Sharepoint Quota</p>
+                {(isLoadingSPQuota || isFetchingSPQuota) && <Skeleton />}
+                {sharepoint && !isFetchingSPQuota && sharepoint?.Dashboard}
+              </CCol>
+              <CCol sm={12} md={4} className="mb-3">
                 <p className="fw-lighter">Applied Standards</p>
                 {(isLoadingStandards || isFetchingStandards) && <Skeleton />}
                 {issuccessStandards &&
@@ -280,6 +310,21 @@ const Home = () => {
                         )
                       })
                     })}
+              </CCol>
+              <CCol sm={12} md={4} className="mb-3">
+                <p className="fw-lighter">Partner Relationships</p>
+                {(isLoadingPartners || isFetchingPartners) && <Skeleton />}
+                {issuccessPartners &&
+                  !isFetchingPartners &&
+                  partners.map((partner) => {
+                    if (partner.TenantInfo) {
+                      return (
+                        <li key={`${partner.tenantId}`}>
+                          {partner.TenantInfo.displayName} ({partner.TenantInfo.defaultDomainName})
+                        </li>
+                      )
+                    }
+                  })}
               </CCol>
             </CRow>
           </CippContentCard>
